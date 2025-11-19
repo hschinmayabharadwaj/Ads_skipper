@@ -1,3 +1,4 @@
+
 # YouTube Ad Skipper Chrome Extension
 
 A powerful Chrome extension that automatically skips ads on YouTube videos and provides custom playback speed controls.
