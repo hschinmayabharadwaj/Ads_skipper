@@ -1,0 +1,16 @@
+<!-- This is a placeholder. Replace with actual PNG icon files -->
+<!-- For now, you can use any 16x16, 48x48, and 128x128 PNG images -->
+<!-- You can create icons using online tools like:
+  - https://favicon.io/
+  - https://www.canva.com/
+  - Or use any image editor
+-->
+
+To create icons quickly:
+1. Create simple PNG images with dimensions 16x16, 48x48, and 128x128 pixels
+2. Name them icon16.png, icon48.png, and icon128.png
+3. Place them in the extension folder
+
+Or use this temporary solution:
+- You can remove the "icons" section from manifest.json temporarily
+- Chrome will use a default icon placeholder
