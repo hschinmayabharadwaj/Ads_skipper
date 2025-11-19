@@ -138,17 +138,19 @@ document.addEventListener('yt-navigate-finish', () => {
 
 // Function to create and add speed control button
 function addSpeedControlButton() {
-  // Check if button already exists
-  if (document.querySelector('#custom-speed-control')) {
-    return;
-  }
+  try {
+    // Check if button already exists
+    if (document.querySelector('#custom-speed-control')) {
+      return;
+    }
 
-  // Wait for YouTube player controls to be available
-  const checkControls = setInterval(() => {
-    const rightControls = document.querySelector('.ytp-right-controls');
-    
-    if (rightControls) {
-      clearInterval(checkControls);
+    // Wait for YouTube player controls to be available
+    const checkControls = setInterval(() => {
+      try {
+        const rightControls = document.querySelector('.ytp-right-controls');
+        
+        if (rightControls) {
+          clearInterval(checkControls);
       
       // Create speed button
       const speedButton = document.createElement('button');
@@ -223,49 +225,71 @@ function addSpeedControlButton() {
       }
       
       console.log('YouTube Ad Skipper: Speed control button added');
-    }
-  }, 500);
-  
-  // Stop checking after 10 seconds
-  setTimeout(() => clearInterval(checkControls), 10000);
+        }
+      } catch (error) {
+        console.error('YouTube Ad Skipper: Error in checkControls interval:', error);
+      }
+    }, 500);
+    
+    // Stop checking after 10 seconds
+    setTimeout(() => clearInterval(checkControls), 10000);
+  } catch (error) {
+    console.error('YouTube Ad Skipper: Error adding speed control button:', error);
+  }
 }
 
 // Function to show speed change notification
 function showSpeedNotification(speed) {
-  // Remove existing notification if any
-  const existingNotification = document.querySelector('#speed-notification');
-  if (existingNotification) {
-    existingNotification.remove();
+  try {
+    // Check if document.body exists
+    if (!document.body) {
+      console.log('YouTube Ad Skipper: Cannot show notification, document.body not available');
+      return;
+    }
+    
+    // Remove existing notification if any
+    const existingNotification = document.querySelector('#speed-notification');
+    if (existingNotification) {
+      existingNotification.remove();
+    }
+    
+    // Create notification
+    const notification = document.createElement('div');
+    notification.id = 'speed-notification';
+    notification.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 20px 40px;
+      border-radius: 8px;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 9999;
+      pointer-events: none;
+      font-family: 'YouTube Sans', 'Roboto', sans-serif;
+    `;
+    notification.textContent = `Speed: ${speed}x`;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 1 second
+    setTimeout(() => {
+      if (notification && notification.parentNode) {
+        notification.style.transition = 'opacity 0.3s';
+        notification.style.opacity = '0';
+        setTimeout(() => {
+          if (notification && notification.parentNode) {
+            notification.remove();
+          }
+        }, 300);
+      }
+    }, 1000);
+  } catch (error) {
+    console.error('YouTube Ad Skipper: Error showing notification:', error);
   }
-  
-  // Create notification
-  const notification = document.createElement('div');
-  notification.id = 'speed-notification';
-  notification.style.cssText = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px 40px;
-    border-radius: 8px;
-    font-size: 24px;
-    font-weight: bold;
-    z-index: 9999;
-    pointer-events: none;
-    font-family: 'YouTube Sans', 'Roboto', sans-serif;
-  `;
-  notification.textContent = `Speed: ${speed}x`;
-  
-  document.body.appendChild(notification);
-  
-  // Remove after 1 second
-  setTimeout(() => {
-    notification.style.transition = 'opacity 0.3s';
-    notification.style.opacity = '0';
-    setTimeout(() => notification.remove(), 300);
-  }, 1000);
 }
 
 // Initialize speed control button
